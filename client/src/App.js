@@ -7,8 +7,8 @@ import { useUser, SignedIn, SignedOut, SignInButton } from "@clerk/clerk-react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-const socket = io("http://localhost:5000");
-// const socket = io("https://kilam-gpt.onrender.com");
+// const socket = io("http://localhost:5000");
+const socket = io("https://kilam-gpt.onrender.com");
 
 function App() {
   const [query, setQuery] = useState("");
