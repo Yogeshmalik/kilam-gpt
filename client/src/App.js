@@ -4,7 +4,8 @@ import "tailwindcss/tailwind.css";
 import "prismjs/themes/prism-tomorrow.css";
 import Prism from "prismjs";
 
-const socket = io("http://localhost:5000");
+// const socket = io("http://localhost:5000");
+const socket = io("https://kilam-gpt.onrender.com");
 
 function App() {
   const [query, setQuery] = useState("");
