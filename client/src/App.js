@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import "tailwindcss/tailwind.css";
 import "prismjs/themes/prism-tomorrow.css";
 import Prism from "prismjs";
-import { useUser, SignedIn, SignedOut, SignInButton } from "@clerk/clerk-react";
+import { useUser, SignedIn, SignedOut, SignInButton, SignIn } from "@clerk/clerk-react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -186,13 +186,14 @@ function App() {
 
   return (
     <>
-      <div className="bg-gray-800 h-scree flex items-center justify-center">
+      <div className="bg-gray-800 h-screen flex items-center justify-center">
         <SignedOut>
-          <SignInButton mode="modal">
+          {/* <SignInButton mode="modal">
             <button className="border rounded-md border-1 px-6 py-3 text-2xl bg-gradient-to-r from-blue-600 to-blue-400 text-transparent bg-clip-text">
               Sign In
             </button>
-          </SignInButton>
+          </SignInButton> */}
+          <SignIn/>
         </SignedOut>
       </div>
 
