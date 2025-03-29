@@ -1,13 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { ClerkProvider } from "@clerk/clerk-react";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const CLERK_FRONTEND_API = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
+
+if (!CLERK_FRONTEND_API) {
+  throw new Error(
+    "Missing Clerk API key. Please set it up in your environment."
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <ClerkProvider publishableKey={CLERK_FRONTEND_API}>
+      <App />
+    </ClerkProvider>
   </React.StrictMode>
 );
 

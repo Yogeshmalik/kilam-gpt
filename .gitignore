@@ -1,1 +1,13 @@
 server/.env
+client/.env
+
+# Ignore node_modules in both client and server
+client/node_modules/
+server/node_modules/
+node_modules/
+
+# Ignore other unnecessary files
+.env
+.DS_Store
+.vscode/
+*.log
