@@ -13,7 +13,7 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           {/* Left */}
           <div className="flex items-center justify-between h-16">
-            <AgentPulse size="small" color="blue" />
+            <AgentPulse size="medium" color="blue" />
           </div>
           <a
             href="https://yogeshmalikportfolio.netlify.app/"
