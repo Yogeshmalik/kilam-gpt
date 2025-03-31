@@ -1,5 +1,5 @@
 // src/components/ChatInput.js
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import AudioControls from "./AudioControls";
 
 const ChatInput = ({ query, setQuery, sendTextQuery, setError }) => {
@@ -23,36 +23,58 @@ const ChatInput = ({ query, setQuery, sendTextQuery, setError }) => {
     }
   };
 
-  return (
-    <div className="p-4 sticky bottom-0 left-0 right-0 bg-gray-800 flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
-        <button
-          className="bg-blue-500 flex text-white hover:bg-blue-600 px-4 py-2 rounded-lg font-bold"
-          //   onClick={() => window.location.reload()}
-          onClick={() => {
-            window.location.reload();
-          }}
-        >
-          Refresh
-        </button>
-      <form onSubmit={handleSubmit} className="w-full flex space-x-2">
-        <textarea
-          className="flex-1 p-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none resize-none"
-          rows="2"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Type a message..."
-        />
-        <button
-          type="submit"
-          className="bg-green-500 text-white hover:bg-green-600 px-4 py-2 rounded-lg font-bold"
-        >
-          Send
-        </button>
-      </form>
+  const textareaRef = useRef(null);
 
-      {/* Include AudioControls Component */}
-      <AudioControls setError={setError} />
+  const adjustTextareaHeight = (textarea) => {
+    textarea.style.height = "auto"; // Reset height first
+    textarea.style.height = Math.min(textarea.scrollHeight, 200) + "px"; // Limit max height (200px)
+  };
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      adjustTextareaHeight(textareaRef.current); // Adjust on mount
+    }
+  }, [query]);
+
+  return (
+    <div className="px-3 py-3 sm:p-4 sticky bottom-0 left-0 right-0 bg-gradient-to-r from-gray-800 via-gray-900 to-black shadow-md">
+      <div className="flex items-center justify-between space-x-1 sm:space-x-3 w-full">
+        <button
+          className="sm:p-3 rounded-full text-3xl font-bold text-white shadow-lg hover:opacity-80 transition-opacity duration-200"
+          onClick={() => window.location.reload()}
+          title="Refresh"
+        >
+          ↺
+        </button>
+        <form
+          onSubmit={handleSubmit}
+          className={`flex flex-1 items-center bg-gray-700/50 px-2 sm:px-4 py-2 border border-gray-600 shadow-inner overflow-auto transition-all duration-300 ${
+            query.length > 50 ? "rounded-lg" : "rounded-full"
+          }`}
+        >
+          <textarea
+            className="flex-1 p-2 bg-transparent text-white border-none focus:ring-0 focus:outline-none resize-none placeholder-gray-400"
+            rows="1"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              adjustTextareaHeight(e.target);
+            }}
+            onKeyDown={handleKeyDown}
+            placeholder="Type a message..."
+            ref={textareaRef}
+          />
+          <button
+            type="submit"
+            className="sm:p-3 rounded-full text-3xl g-gradient-to-r from-gray-800 to-gray-600 text-white shadow-lg hover:opacity-80 transition-opacity duration-200"
+            title="Send"
+          >
+            ➤
+          </button>
+        </form>
+        {/* Include AudioControls Component */}
+        <AudioControls setError={setError} />
+      </div>
     </div>
   );
 };

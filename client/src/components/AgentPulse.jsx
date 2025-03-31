@@ -1,7 +1,7 @@
 const AgentPulse = ({ size = "medium", color = "blue" }) => {
   const sizeClasses = {
     small: "w-4 h-4",
-    medium: "w-8 h-8",
+    medium: "w-6 sm:w-7 h-6 sm:h-7",
     large: "w-16 h-16",
   };
 

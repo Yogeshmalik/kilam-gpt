@@ -1,18 +1,28 @@
 // src/hooks/useChat.js
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
+import { useClerk } from "@clerk/clerk-react";
 
 const socket = io("https://kilam-gpt.onrender.com");
 
 // ✅ Define allowed premium email addresses
-const ALLOWED_EMAILS = ["timelytranscribe@gmail.com", "ysmworking@gmail.com"];
+const ALLOWED_EMAILS = ["timelytranscribe@gmail.com", "smworking@gmail.com"];
 
 const useChat = (userEmail) => {
+  const { signOut } = useClerk();
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState(null);
   const [queryCount, setQueryCount] = useState(0);
+  // const [queryCount, setQueryCount] = useState(
+  //   parseInt(localStorage.getItem("queryCount")) || 0
+  // );
+
   // ✅ Check if the user has unlimited queries
   const hasUnlimitedQueries = userEmail && ALLOWED_EMAILS.includes(userEmail);
+  const isLoggedIn = !!userEmail;
+
+  // ✅ Define query limits
+  const QUERY_LIMIT = hasUnlimitedQueries ? Infinity : isLoggedIn ? 2 : 1;
 
   useEffect(() => {
     socket.on("aiText", (text) => {
@@ -42,10 +52,19 @@ const useChat = (userEmail) => {
   const sendTextQuery = (query) => {
     if (!query.trim()) return;
 
-    // ✅ Restrict non-whitelisted users to 4 free queries
-    if (!hasUnlimitedQueries && queryCount >= 4) {
+    // ✅ Check if the user is signed in
+    if (!isLoggedIn && queryCount >= QUERY_LIMIT) {
       setError(
-        "⚠️ You have reached the free query limit. Sign in with an allowed email for unlimited access."
+        "⚠️ You have reached your free query limit. Please sign in to continue."
+      );
+      return;
+    }
+
+    // ✅ Restrict non-whitelisted users to free queries
+    if (isLoggedIn && !hasUnlimitedQueries && queryCount >= QUERY_LIMIT) {
+      setError(
+        // `🚨 You have exhausted your free queries. (${QUERY_LIMIT}).`
+        "🚨 You have exhausted your free queries."
       );
       return;
     }
@@ -62,13 +81,22 @@ const useChat = (userEmail) => {
       }
     });
 
-    // ✅ Increase query count for non-whitelisted users
+    // ✅ Increase and save query count for non-whitelisted users
     if (!hasUnlimitedQueries) {
-      setQueryCount((prev) => prev + 1);
+      const newCount = queryCount + 1;
+      setQueryCount(newCount);
+      // localStorage.setItem("queryCount", newCount);
     }
   };
 
-  return { messages, error, sendTextQuery, setError };
+  // ✅ Logout function when limit is reached
+  const handleLogout = () => {
+    signOut(); // Clerk logout
+    // localStorage.removeItem("queryCount"); // Reset query count
+    // window.location.reload(); // Refresh the page after logout
+  };
+
+  return { messages, error, sendTextQuery, setError, handleLogout };
 };
 
 export default useChat;

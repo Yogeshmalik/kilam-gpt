@@ -1,6 +1,7 @@
 // src/components/AudioControls.js
 import React, { useRef, useState } from "react";
 import io from "socket.io-client";
+import AgentPulse from "./AgentPulse";
 
 const socket = io("https://kilam-gpt.onrender.com");
 
@@ -50,16 +51,25 @@ const AudioControls = ({ setError }) => {
       disabled={isDisabled} // Make button non-clickable
       onMouseDown={startRecording}
       onMouseUp={stopRecording}
-      className={`px-4 py-2 rounded-lg font-bold w-full sm:w-auto 
+      className={`sm:px-2 py-2 text-white text-3xl rounded-lg font-bold w-ful sm:w-auto 
     ${
       recording
-        ? "bg-red-500"
+        ? "bg-red-5"
         : isDisabled
-        ? "hidden bg-gray-400 cursor-not-allowed opacity-50"
-        : "bg-yellow-500 hover:bg-yellow-600"
+        ? "hidden bg-gray-40 cursor-not-allowed opacity-50"
+        : "bg-yellow-5 hover:bg-yellow-6 cursor-pointer"
     }`}
     >
-      {recording ? "Recording..." : "Hold to Speak"}
+      {recording ? (
+        <AgentPulse color="green" />
+      ) : (
+        <span
+          className="shadow-lg hover:opacity-80 transition-opacity duration-200"
+          title="Hold to record"
+        >
+          🎤
+        </span>
+      )}
     </button>
   );
 };

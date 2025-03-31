@@ -382,3 +382,118 @@ const ChatMessages = ({ messages, status }) => {
 
 export default ChatMessages;
 
+
+//chatInput
+
+<div className="px-4 py-3 sm:p-4 sticky bottom-0 left-0 right-0 bg-gradient-to-r from-gray-800 via-gray-900 to-black shadow-md">
+  <div className="flex items-center justify-between space-x-3 w-full">
+    
+    {/* Refresh Button */}
+    <button
+      className="p-3 rounded-full bg-gradient-to-r from-blue-600 to-blue-400 text-white shadow-lg hover:opacity-80 transition-opacity duration-200"
+      onClick={() => window.location.reload()}
+      title="Refresh"
+    >
+      🔄
+    </button>
+
+    {/* Input Form */}
+    <form onSubmit={handleSubmit} className="flex flex-1 items-center bg-gray-700/50 rounded-full px-4 py-2 border border-gray-600 shadow-inner">
+      <textarea
+        className="flex-1 p-2 bg-transparent text-white border-none focus:ring-0 focus:outline-none resize-none placeholder-gray-400"
+        rows="1"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder="Type a message..."
+      />
+      
+      {/* Send Button */}
+      <button
+        type="submit"
+        className="p-3 rounded-full bg-gradient-to-r from-green-500 to-green-400 text-white shadow-lg hover:opacity-80 transition-opacity duration-200"
+        title="Send"
+      >
+        ➤
+      </button>
+    </form>
+
+    {/* Audio Button */}
+    <AudioControls setError={setError} />
+  </div>
+</div>
+
+import React, { useState } from "react";
+import { useUser, SignedIn, SignedOut, SignIn, SignInButton, UserButton } from "@clerk/clerk-react";
+import Header from "./components/Header";
+import ScrollToTop from "./components/scrollToTopBottom";
+import ChatMessages from "./components/ChatMessages";
+import ChatInput from "./components/ChatInput";
+import ErrorMessage from "./components/ErrorMessage";
+import useChat from "./hooks/useChat";
+
+function App() {
+  const { user } = useUser();
+  const userEmail = user?.primaryEmailAddress?.emailAddress || null;
+  const { messages, error, sendTextQuery, setError } = useChat(userEmail);
+  const [query, setQuery] = useState("");
+  const [showSignInPrompt, setShowSignInPrompt] = useState(false); // ✅ State for sign-in prompt
+
+  return (
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+      {/* ✅ Show Header with Sign-In Button */}
+      <header className="flex justify-between items-center px-4 py-3 bg-gray-800 shadow-md">
+        <Header />
+        <div className="flex items-center space-x-3">
+          <UserButton afterSignOutUrl="/" />
+          <SignedOut>
+            <button
+              className="px-4 py-2 text-white bg-teal-600 rounded-md hover:bg-teal-500 transition"
+              onClick={() => setShowSignInPrompt(true)}
+            >
+              Sign In
+            </button>
+          </SignedOut>
+        </div>
+      </header>
+
+      {/* ✅ Show Clerk Sign-In Modal if Prompted */}
+      {showSignInPrompt && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-gray-800 p-6 rounded-md shadow-md">
+            <h2 className="text-white text-lg mb-3">Sign in to continue</h2>
+            <SignIn />
+            <button
+              className="mt-3 text-gray-400 hover:text-gray-200"
+              onClick={() => setShowSignInPrompt(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      <ErrorMessage error={error} />
+      <ChatMessages messages={messages} />
+      <ScrollToTop />
+
+      {/* ✅ Show a message when free queries are exhausted */}
+      {error?.includes("free query limit") && (
+        <div className="p-4 bg-yellow-800 text-yellow-300 text-center">
+          <p>You have used your free queries. Sign in to continue.</p>
+          <button
+            className="mt-2 px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-500 transition"
+            onClick={() => setShowSignInPrompt(true)}
+          >
+            Sign In
+          </button>
+        </div>
+      )}
+
+      <ChatInput query={query} setQuery={setQuery} sendTextQuery={sendTextQuery} setError={setError} />
+    </div>
+  );
+}
+
+export default App;
+
