@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ClerkProvider } from "@clerk/clerk-react";
+import { dark } from "@clerk/themes";
 
 const CLERK_FRONTEND_API = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 
@@ -16,7 +17,12 @@ if (!CLERK_FRONTEND_API) {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <ClerkProvider publishableKey={CLERK_FRONTEND_API}>
+    <ClerkProvider
+      publishableKey={CLERK_FRONTEND_API}
+      appearance={{
+        baseTheme: dark,
+      }}
+    >
       <App />
     </ClerkProvider>
   </React.StrictMode>

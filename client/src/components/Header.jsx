@@ -6,7 +6,7 @@ import {
 } from "@clerk/clerk-react";
 import AgentPulse from "./AgentPulse";
 
-const Header = () => {
+const Header = ({ disableSignIn }) => {
   return (
     <header className="bg-opacity-90 sticky top-0 z-50 px-4 md:px- bg-gray-800 backdrop-blur-sm border-b border-gray-900 shadow-lg">
       <div className="container mx-auto">
@@ -27,13 +27,18 @@ const Header = () => {
           <div className="flex items-center gap-4">
             <SignedIn>
               {/* <div className="p-2 w-12 h-12 sm:w-auto sm:h-auto  flex items-center justify-center rounded-full"> */}
-                <UserButton />
+              <UserButton />
               {/* </div> */}
             </SignedIn>
 
             <SignedOut>
-              <SignInButton mode="modal">
-                <button className="bg-gradient-to-r from-blue-600 to-blue-400 text-transparent bg-clip-text">
+              <SignInButton mode="modal"  appearance={{ baseTheme: "dark" }}>
+                <button
+                  disabled={disableSignIn} // ✅ Disable when modal is open
+                  className={`bg-gradient-to-r from-blue-600 to-blue-400 text-transparent bg-clip-text ${
+                    disableSignIn ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                >
                   Sign In
                 </button>
               </SignInButton>

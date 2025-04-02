@@ -1,19 +1,13 @@
 // src/App.js
 import React, { useState } from "react";
-import {
-  useUser,
-  SignedIn,
-  SignedOut,
-  SignIn,
-  UserButton,
-  SignInButton,
-} from "@clerk/clerk-react";
+import { useUser, SignIn } from "@clerk/clerk-react";
 import Header from "./components/Header";
 import ScrollToTop from "./components/scrollToTopBottom";
 import ChatMessages from "./components/ChatMessages";
 import ChatInput from "./components/ChatInput";
 import ErrorMessage from "./components/ErrorMessage";
 import useChat from "./hooks/useChat";
+import WelcomeModal from "./components/WelcomeModal";
 
 function App() {
   const { user } = useUser();
@@ -21,6 +15,7 @@ function App() {
   const { messages, error, sendTextQuery, setError, handleLogout } =
     useChat(userEmail);
   const [query, setQuery] = useState("");
+  const [showWelcome, setShowWelcome] = useState(true);
 
   // const showSignInModal = !user && error?.includes("You have reached your free query limit. Please sign in");
   // const showLimitModal = user && error?.includes("You have exhausted your free queries");
@@ -58,7 +53,9 @@ function App() {
           showSignInModal || showLimitModal ? "overflow-hidde" : ""
         }`}
       >
-        <Header />
+        <Header
+          disableSignIn={showSignInModal || showLimitModal || showWelcome}
+        />
         <ErrorMessage error={error} />
         {/* ✅ Blur everything if sign-in modal is active */}
         <div
@@ -77,10 +74,18 @@ function App() {
             setError={setError}
           />
         </div>
+
+        {/* ✅ Welcome Modal */}
+        {showWelcome && (
+          <div className="fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-70 z-40 ">
+            <WelcomeModal onClose={() => setShowWelcome(false)} />
+          </div>
+        )}
+
         {/* ✅ Show a message when free queries are exhausted */}
         {showSignInModal && (
           <div className="fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-70 z-40">
-            <SignIn />
+            <SignIn appearance={{ baseTheme: "dark" }} />
           </div>
         )}
 
@@ -97,21 +102,20 @@ function App() {
                 </button>
               </SignInButton> */}
               <div className="flex gap-2 justify-between">
-
-              <button
-                onClick={handleLogout}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                 >
-                Signout
-              </button>
-              <button
-              disabled
-                onClick={''}
-                className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded cursor-not-allowed"
+                  Signout
+                </button>
+                <button
+                  disabled
+                  onClick={""}
+                  className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded cursor-not-allowed"
                 >
-                Subscribe
-              </button>
-                </div>
+                  Subscribe
+                </button>
+              </div>
             </div>
           </div>
         )}
