@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import { SignIn, SignInButton } from "@clerk/clerk-react";
 
 const WelcomeModal = ({ onClose }) => {
+  const [showSignIn, setShowSignIn] = useState(false);
   return (
     <div className="relative bg-gray-900 container ring-1 ring-white/10 sm:rounded-3xl">
       <div className="relative h-80 overflow-hidden bg-indigo-600 md:absolute md:left-0 md:h-full md:w-1/3 lg:w-1/2 sm:rounded-s-3xl">
@@ -46,13 +48,21 @@ const WelcomeModal = ({ onClose }) => {
             Your AI-powered chat assistant is here! Start asking questions and
             explore the power of AI.
           </p>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-col items-center sm:items-start space-y-4 sm:space-y-8">
             <button
               onClick={onClose}
               className="inline-flex rounded-md bg-white/10 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Try it out !
             </button>
+            <div className="flex flex-col gap-4">
+              <p className="text-gray-300 text-sm">Already have an account?</p>
+              <SignInButton mode="modal">
+                <button className="bg-gradient-to-r from-green-400 to-teal-400 text-transparent bg-clip-text inline-flex rounded-md px-3.5 py-1.5 w-fit border border-lime-700">
+                  Sign In
+                </button>
+              </SignInButton>
+            </div>
           </div>
         </div>
       </div>

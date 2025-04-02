@@ -15,7 +15,7 @@ function App() {
   const { messages, error, sendTextQuery, setError, handleLogout } =
     useChat(userEmail);
   const [query, setQuery] = useState("");
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(!user);
 
   // const showSignInModal = !user && error?.includes("You have reached your free query limit. Please sign in");
   // const showLimitModal = user && error?.includes("You have exhausted your free queries");
@@ -76,7 +76,7 @@ function App() {
         </div>
 
         {/* ✅ Welcome Modal */}
-        {showWelcome && (
+        {showWelcome && !user &&  (
           <div className="fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-70 z-40 ">
             <WelcomeModal onClose={() => setShowWelcome(false)} />
           </div>
