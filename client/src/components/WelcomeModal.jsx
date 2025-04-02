@@ -36,7 +36,7 @@ const WelcomeModal = ({ onClose }) => {
           </defs>
         </svg>
       </div>
-      <div className="relative mx-auto max-w-7xl py-24 sm:py-32 lg:px-8 lg:py-40">
+      <div className="relative mx-auto max-w-7xl py-16 sm:py-32 lg:px-8 lg:py-40">
         <div className="pl-6 pr-6 md:ml-auto md:w-2/3 md:pl-16 lg:w-1/2 lg:pl-24 lg:pr-0 xl:pl-32 items-center sm:items-start flex flex-col text-center sm:text-start">
           <h2 className="text-base/7 font-semibold text-indigo-400">
             Welcome to Kilam GPT
@@ -55,7 +55,7 @@ const WelcomeModal = ({ onClose }) => {
             >
               Try it out !
             </button>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 items-center sm:items-start">
               <p className="text-gray-300 text-sm">Already have an account?</p>
               <SignInButton mode="modal">
                 <button className="bg-gradient-to-r from-green-400 to-teal-400 text-transparent bg-clip-text inline-flex rounded-md px-3.5 py-1.5 w-fit border border-lime-700">
