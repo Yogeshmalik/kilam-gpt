@@ -77,7 +77,7 @@ function App() {
 
         {/* ✅ Welcome Modal */}
         {showWelcome && !user &&  (
-          <div className="fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-70 z-40 ">
+          <div className="fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-70 z-40 p-4">
             <WelcomeModal onClose={() => setShowWelcome(false)} />
           </div>
         )}

@@ -30,7 +30,7 @@ export default function ScrollToTopBottom() {
     showButton && (
       <button
         onClick={handleClick}
-        className="fixed left-1/2 -translate-x-1/2 bottom-24 z-50 flex h-12 w-12 items-center justify-center rounded-ful bg-gray-60 text-white text-xl shadow-lg hover:bg-gray-70 transition-all duration-300 cursor-pointer"
+        className="fixed left-1/2 -translate-x-1/2 bottom-16 sm:bottom-24 z-40 flex h-12 w-12 items-center justify-center rounded-ful bg-gray-60 text-white text-xl shadow-lg hover:bg-gray-70 transition-all duration-300 cursor-pointer"
         title={scrollToBottom ? "Scroll to Bottom" : "Scroll to Top"}
       >
         {scrollToBottom ? "▼" : "▲"}

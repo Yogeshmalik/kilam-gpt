@@ -53,7 +53,7 @@ const ChatInput = ({ query, setQuery, sendTextQuery, setError }) => {
           }`}
         >
           <textarea
-            className="flex-1 p-2 bg-transparent text-white border-none focus:ring-0 focus:outline-none resize-none placeholder-gray-400"
+            className="flex-1 p-2 bg-transparent text-white border-none focus:ring-0 focus:outline-none resize-none placeholder-gray-400 whitespace-pre-wrap"
             rows="1"
             value={query}
             onChange={(e) => {
